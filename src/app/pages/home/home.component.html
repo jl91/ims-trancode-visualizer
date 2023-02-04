@@ -1,1 +1,40 @@
-<p>home works!</p>
+<div class="component-container">
+  <h1>IMS Trancoder Tools</h1>
+
+  <mat-divider></mat-divider>
+
+  <div class="component-container_section">
+    <ul>
+      <li class="link-container">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Example home icon"
+          fontIcon="east"
+        >
+        </mat-icon>
+        <a
+          class="link-btn"
+          [routerLink]="['/trancode-mapper']"
+          routerLinkActive="router-link-active"
+        >
+          Click Here to map your trancode
+        </a>
+      </li>
+      <li class="link-container">
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Example home icon"
+          fontIcon="east"
+        >
+        </mat-icon>
+        <a
+          class="link-btn"
+          [routerLink]="['/trancode-viewer']"
+          routerLinkActive="router-link-active"
+        >
+          Click Here to visualize your trancode
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

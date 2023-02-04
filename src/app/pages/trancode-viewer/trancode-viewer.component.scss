@@ -1,6 +1,13 @@
-.component-container {
+.component {
+  h1 {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+  }
 
-  &_section {
+  &_links {
+    display: flex;
+    justify-content: center;
 
     &.link-btn {
       color: white;
