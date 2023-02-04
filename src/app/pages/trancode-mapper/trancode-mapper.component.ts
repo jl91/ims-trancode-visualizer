@@ -1,21 +1,27 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TrancodeField } from 'src/app/core/websql/entities/tracode-field.entity';
+import { TrancodesEntity } from 'src/app/core/websql/entities/trancodes.entity';
+import { TrancodesService } from 'src/app/core/websql/services/trancodes.service';
+import { stringify } from 'uuid';
 
 @Component({
   selector: 'app-trancode-mapper',
   templateUrl: './trancode-mapper.component.html',
   styleUrls: ['./trancode-mapper.component.scss']
 })
-export class TrancodeMapperComponent {
+export class TrancodeMapperComponent implements OnInit {
 
   public baseForm: FormGroup = this.formBuilder.group({
-    trancodeName: new FormControl('', []),
+    name: new FormControl('', [Validators.required]),
+    label: new FormControl('', [Validators.required]),
     fields: this.formBuilder.array([])
   });
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private trancodesService: TrancodesService
   ) {
     this.addTrancodeField();
   }
@@ -54,6 +60,23 @@ export class TrancodeMapperComponent {
 
   public onSubmit(event: SubmitEvent): void{
     console.log(event);
+
+    const {name, label, fields } = this.baseForm.value;
+
+    const entity = new TrancodesEntity();
+
+    entity.name = name;
+    entity.label = label;
+    entity.fields = fields.map((field: {name: string, size: number}) => {
+      const trancodeField = new TrancodeField();
+      field.name = field.name;
+      field.size = field.size;
+      return trancodeField;
+    });
+
+    this.trancodesService.save(entity).subscribe(result => {
+      console.log(result);
+    });
   }
 
   public onRemove(index: number): void{
@@ -71,13 +94,16 @@ export class TrancodeMapperComponent {
 
     moveItemInArray(this.trancodeFields.controls, previousIndex, currentIndex);
 
-
     this.trancodeFields.insert(currentIndex, previousControl);
     this.trancodeFields.removeAt(currentIndex);
 
     this.trancodeFields.insert(previousIndex, currentControl);
     this.trancodeFields.removeAt(previousIndex);
 
+  }
+
+  ngOnInit(): void {
+    // this.baseForm.value = this.data;
   }
 
 }
