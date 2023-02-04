@@ -1,0 +1,36 @@
+.page-container{
+
+  &_section{
+    flex: 1;
+    display: flex;
+    width: auto;
+
+    .form-container{
+
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      .form-item{
+        padding: 5px;
+      }
+
+      .add-trancode-field{
+        padding: 25px;
+      }
+
+      .fields-container{
+        display: flex;
+        flex-direction: row;
+
+        .field-item{
+          margin: 5px;
+        }
+      }
+    }
+
+  }
+}
+
+
+
