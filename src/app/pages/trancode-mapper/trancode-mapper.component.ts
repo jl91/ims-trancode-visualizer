@@ -71,11 +71,12 @@ export class TrancodeMapperComponent {
 
     moveItemInArray(this.trancodeFields.controls, previousIndex, currentIndex);
 
-    this.trancodeFields.removeAt(currentIndex);
-    this.trancodeFields.removeAt(previousIndex);
 
     this.trancodeFields.insert(currentIndex, previousControl);
+    this.trancodeFields.removeAt(currentIndex);
+
     this.trancodeFields.insert(previousIndex, currentControl);
+    this.trancodeFields.removeAt(previousIndex);
 
   }
 
