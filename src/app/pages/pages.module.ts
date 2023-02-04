@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { TrancodeMapperComponent } from './trancode-mapper/trancode-mapper.component';
 import { TrancodeViewerComponent } from './trancode-viewer/trancode-viewer.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const material_modules = [
   MatSidenavModule,
@@ -39,6 +39,7 @@ const material_modules = [
     RouterModule,
     PagesRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     ...material_modules,
   ],
   exports: [PagesRoutingModule],

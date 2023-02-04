@@ -6,7 +6,7 @@
   <div class="page-container_section">
 
     <div class="form-container">
-      <form [formGroup]="formGroup">
+      <form [formGroup]="baseForm">
 
         <mat-form-field class="form-item">
           <mat-label>
@@ -24,11 +24,12 @@
           </button>
         </div>
 
-        <ng-container *ngIf="trancodeFields.length > 0">
-          <ng-container formArrayName="trancodeFields">
-            <ng-container *ngFor="let trancodeField of trancodeFields.controls; let i = index">
+        <!-- <ng-container *ngIf="trancodeFields.length > 0"> -->
+          <ng-container formArrayName="trancodeFields"
+            *ngFor="let trancodeField of trancodeFields.controls; let i = index"
+          >
 
-              <div class="fields-container" [formGroup]="trancodeField"]>
+              <div class="fields-container" [formGroupName]="i">
 
                 <mat-form-field class="field-item">
                   <mat-label>
@@ -44,10 +45,10 @@
                   <input matInput formControlName="fieldSize" type="number">
                 </mat-form-field>
 
-            </div>
+              </div>
+
             </ng-container>
-          </ng-container>
-        </ng-container>
+        <!-- </ng-container> -->
 
       </form>
 

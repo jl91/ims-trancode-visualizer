@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-trancode-mapper',
@@ -8,15 +8,14 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class TrancodeMapperComponent {
 
-  public formGroup: FormGroup;
+  public baseForm: FormGroup = this.formBuilder.group({
+    trancodeName: new FormControl('', []),
+    trancodeFields: this.formBuilder.array([])
+  });
 
   constructor(
     private formBuilder: FormBuilder
   ) {
-    this.formGroup = this.formBuilder.group({
-      trancodeName: ['', ''],
-      trancodeFields: this.formBuilder.array([])
-    });
   }
 
   public displayedColumns: string[] = [
@@ -34,20 +33,19 @@ export class TrancodeMapperComponent {
   ];
 
   get trancodeFields(): FormArray {
-    return this.formGroup.controls['trancodeFields'] as FormArray;
+    return (<FormArray> this.baseForm.controls['trancodeFields']);
   }
 
   addTrancodeField(event: MouseEvent): void{
     event.preventDefault();
     event.stopImmediatePropagation();
     event.stopPropagation();
-
-    const newForm = this.formBuilder.group({
-      fieldName: ['', ''],
-      fieldSize: ['biginteger', '']
-    });
-
-    this.trancodeFields.push(newForm);
+    this.trancodeFields.push(
+      this.formBuilder.group({
+        fieldName: new FormControl('', []),
+        fieldSize: new FormControl('', []),
+      })
+    );
   }
 
 }
