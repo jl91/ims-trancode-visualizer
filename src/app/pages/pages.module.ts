@@ -12,10 +12,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 import { TrancodeMapperComponent } from './trancode-mapper/trancode-mapper.component';
 import { TrancodeViewerComponent } from './trancode-viewer/trancode-viewer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+
 
 const material_modules = [
   MatSidenavModule,
@@ -24,7 +28,8 @@ const material_modules = [
   MatIconModule,
   MatTableModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  DragDropModule
 ];
 
 @NgModule({
@@ -40,6 +45,7 @@ const material_modules = [
     PagesRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxJsonViewerModule,
     ...material_modules,
   ],
   exports: [PagesRoutingModule],

@@ -2,8 +2,11 @@
 
   &_section{
     flex: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
     width: auto;
+    justify-content: space-around;
 
     .form-container{
 
@@ -17,16 +20,25 @@
 
       .add-trancode-field{
         padding: 25px;
+        button{
+          margin-left: 0;
+          margin-right: 10px;
+        }
       }
 
       .fields-container{
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
 
         .field-item{
           margin: 5px;
         }
       }
+    }
+    .json-visualizer{
+
     }
 
   }

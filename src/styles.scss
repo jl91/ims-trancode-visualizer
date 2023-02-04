@@ -19,3 +19,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding: 25px;
   }
 }
+
+
+
+// JSON VIEWER
+
+:root {
+  --ngx-json-key: white;
+  --ngx-json-string: white;
+  --ngx-json-number: yellow
+  --ngx-json-undefined: red;
+  --ngx-json-boolean: white;
+  --ngx-json-date:  white;
+}

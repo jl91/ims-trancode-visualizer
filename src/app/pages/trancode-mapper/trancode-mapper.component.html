@@ -2,17 +2,29 @@
   <h1>IMS Trancoder Mapper</h1>
 
   <mat-divider></mat-divider>
-
+  <h2>Map your trancode here</h2>
   <div class="page-container_section">
 
     <div class="form-container">
-      <form [formGroup]="baseForm">
+      <form [formGroup]="baseForm" (ngSubmit)="onSubmit($event)">
 
-        <mat-form-field class="form-item">
+        <mat-form-field class="form-item" floatLabel="always">
           <mat-label>
             IMS Transaction name
           </mat-label>
           <input matInput formControlName="trancodeName" type="text">
+        </mat-form-field>
+
+        <mat-form-field class="form-item" floatLabel="always">
+          <mat-label>
+            IMS Transaction label
+          </mat-label>
+          <input matInput formControlName="trancodeName" type="text">
+
+          <mat-hint aria-align="start" aria-live="polite" aria-atomic="">
+            <small>Optional</small>
+          </mat-hint>
+
         </mat-form-field>
 
         <mat-divider></mat-divider>
@@ -22,41 +34,55 @@
             <mat-icon>add</mat-icon>
             add trancode field
           </button>
+
+          <button mat-raised-button matButton type="submit" color="primary" [disabled]="baseForm.invalid">
+            <mat-icon>save</mat-icon>
+            save
+          </button>
         </div>
 
-        <!-- <ng-container *ngIf="trancodeFields.length > 0"> -->
-          <ng-container formArrayName="trancodeFields"
-            *ngFor="let trancodeField of trancodeFields.controls; let i = index"
-          >
+        <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+          <ng-container formArrayName="fields" *ngFor="let trancodeField of trancodeFields.controls; let i = index">
 
-              <div class="fields-container" [formGroupName]="i">
+                <div class="fields-container" [formGroupName]="i" cdkDrag>
 
-                <mat-form-field class="field-item">
-                  <mat-label>
-                    Field Name
-                  </mat-label>
-                  <input matInput formControlName="fieldName" type="text">
-                </mat-form-field>
+                  <button mat-icon-button cdkDragHandle>
+                    <mat-icon>
+                        drag_indicator
+                    </mat-icon>
+                  </button>
 
-                <mat-form-field class="form-item">
-                  <mat-label>
-                    Field Size
-                  </mat-label>
-                  <input matInput formControlName="fieldSize" type="number">
-                </mat-form-field>
+                  <mat-form-field class="field-item" floatLabel="always">
+                    <mat-label>
+                      Field Name
+                    </mat-label>
+                    <input matInput formControlName="name" type="text">
+                  </mat-form-field>
 
-              </div>
+                  <mat-form-field class="form-item">
+                    <mat-label>
+                      Field Size
+                    </mat-label>
+                    <input matInput formControlName="size" type="number" min="1">
+                  </mat-form-field>
+
+                  <button mat-icon-button matButton type="button" color="primary" (click)="onRemove(i)" [disabled]="trancodeFields.length <= 1">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+
+                </div>
 
             </ng-container>
-        <!-- </ng-container> -->
-
+        </div>
+        <button mat-raised-button matButton type="submit" color="primary" [disabled]="baseForm.invalid" *ngIf="trancodeFields.length > 5">
+          <mat-icon>save</mat-icon>
+          save
+        </button>
       </form>
 
-      <mat-divider></mat-divider>
 
-      <table mat-table [dataSource]="data" class="mat-elevation-z8">
+      <!-- <table mat-table [dataSource]="data" class="mat-elevation-z8">
 
-        <!-- Position Column -->
         <ng-container *ngFor="let item of data">
 
           <ng-container [matColumnDef]="item.columnName">
@@ -75,11 +101,12 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-      </table>
-
+      </table> -->
 
     </div>
-
+    <div class="json-visualizer">
+      <pre>{{ baseForm.value | json}}</pre>
+    </div>
 
   </div>
 </div>
