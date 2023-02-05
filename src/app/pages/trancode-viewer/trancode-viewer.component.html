@@ -30,12 +30,8 @@
 
     <div class="trancode-text-area" [formGroup]="form">
       <mat-form-field appearance="fill">
-        <textarea matInput
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="1"
-        cdkAutosizeMaxRows="5"
-        formControlName="trancodeText"
-      >
+        <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+          formControlName="trancodeText">
 
         </textarea>
       </mat-form-field>
@@ -49,12 +45,18 @@
       </p>
     </div>
 
-    <div class="dump-variables" >
-      <ul *ngFor="let field of currentTrancodeFields">
-        <li>Name: {{field.fieldName}}</li>
-        <li>Value: {{field.fieldValue}}</li>
-        <li>Size: {{field.fieldSize}}</li>
-      </ul>
+    <div class="dump-variables">
+
+      <div class="text-output">
+        <span *ngFor="let field of currentTrancodeFields;let j = index" [ngClass]="{'over-index': j  === currentClassOver}">{{field.fieldValue}}</span>
+      </div>
+      <div class="list-container">
+        <ul *ngFor="let field of currentTrancodeFields; let i = index" (mouseover)="onFieldMouseOver(i)">
+          <li>Name: {{field.fieldName}}</li>
+          <li>Value: {{field.fieldValue}}</li>
+          <li>Size: {{field.fieldSize}}</li>
+        </ul>
+      </div>
     </div>
 
   </div>

@@ -20,6 +20,21 @@
 }
 
 .dump-variables{
-  display: flex;
-  justify-content: flex-start;
+
+  display: grid;
+
+  .list-container{
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  ul:hover{
+    border: dashed 1px white;
+    cursor: pointer;
+  }
+}
+
+.over-index{
+  background: green;
+  color: black;
 }

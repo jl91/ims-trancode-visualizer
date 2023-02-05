@@ -20,6 +20,8 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
 
   public currentTrancodeTextSize: number = 0;
 
+  public currentClassOver: number = -1;
+
   public currentTrancodeFields: {
     fieldName: string,
     fieldValue: string,
@@ -63,7 +65,7 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
           const slice = valueCopy.slice(0, sizeAt);
           valueCopy = valueCopy.slice(sizeAt, valueCopy.length);
 
-          console.log("slice: " + valueCopy+"\n");
+          console.log("slice: " + valueCopy + "\n");
 
           this.currentTrancodeFields.push({
             fieldName: item.name as string,
@@ -95,11 +97,8 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
       (accumulator: number, current: TrancodeFieldEntity) => accumulator + (current.size as number), 0);
   }
 
-  public onTextAreaChange(event: any): void {
-    console.log(event);
-
+  onFieldMouseOver(index: number): void {
+    this.currentClassOver = index;
   }
-
-
 
 }
