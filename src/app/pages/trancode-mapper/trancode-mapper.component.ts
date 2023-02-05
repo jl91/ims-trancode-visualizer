@@ -1,10 +1,10 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TrancodeField } from 'src/app/core/websql/entities/tracode-field.entity';
+import { tap } from 'rxjs';
+import { TrancodeFieldEntity } from 'src/app/core/websql/entities/tracode-field.entity';
 import { TrancodesEntity } from 'src/app/core/websql/entities/trancodes.entity';
 import { TrancodesService } from 'src/app/core/websql/services/trancodes.service';
-import { stringify } from 'uuid';
 
 @Component({
   selector: 'app-trancode-mapper',
@@ -27,18 +27,27 @@ export class TrancodeMapperComponent implements OnInit {
   }
 
   public displayedColumns: string[] = [
-    'test'
+    'id',
+    'Label',
+    'Transaction',
   ];
 
-  public data: {
-      columnName: string,
-      columnValue: string
-  }[] = [
+  public headersMap: {columnName: string, columnValue: string}[] = [
     {
-      columnName: 'test',
-      columnValue: 'teste'
+      columnName: 'id',
+      columnValue: 'id'
+    },
+    {
+      columnName: 'Label',
+      columnValue: 'label'
+    },
+    {
+      columnName: 'Transaction',
+      columnValue: 'name'
     }
   ];
+
+  public data: TrancodesEntity[] = []
 
   get trancodeFields(): FormArray {
     return (<FormArray> this.baseForm.controls['fields']);
@@ -63,12 +72,14 @@ export class TrancodeMapperComponent implements OnInit {
 
     const {name, label, fields } = this.baseForm.value;
 
+    console.log(fields);
+
     const entity = new TrancodesEntity();
 
     entity.name = name;
     entity.label = label;
     entity.fields = fields.map((field: {name: string, size: number}) => {
-      const trancodeField = new TrancodeField();
+      const trancodeField = new TrancodeFieldEntity();
       field.name = field.name;
       field.size = field.size;
       return trancodeField;
@@ -103,7 +114,13 @@ export class TrancodeMapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.baseForm.value = this.data;
+    this.trancodesService.listAll()
+    .pipe(
+      tap(data => console.log(data)),
+    )
+    .subscribe((items: TrancodesEntity[]) => {
+      this.data = items;
+    });
   }
 
 }

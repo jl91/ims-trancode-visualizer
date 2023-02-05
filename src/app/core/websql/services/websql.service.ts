@@ -25,7 +25,8 @@ export class WebsqlService {
   queryExecutor(
     query: string,
     values: any[],
-  ): Promise<SQLResultSet> {
+    queryType: "select" | "other"
+  ): Promise<SQLResultSet | SQLResultSetRowList> {
 
     console.info(`executing query: ${query} with values: `, values);
 
@@ -38,7 +39,7 @@ export class WebsqlService {
           (internalTransaction: SQLTransaction, results: SQLResultSet) => {
             console.log("results of transaction", internalTransaction);
             console.log("results of transaction", results);
-            return resolve(results)
+            return queryType == "select" ? resolve(results.rows): resolve(results);
           },
           // Error callback
           (transaction: SQLTransaction, error:  SQLError) => {
@@ -55,7 +56,7 @@ export class WebsqlService {
   createTable(tableName: string, fieldsNames: string[]): Observable<SQLResultSet> {
     const fields = fieldsNames.join(', ')
     const tableQuery = `CREATE TABLE IF NOT EXISTS ${tableName} (${fields})`;
-   return from(this.queryExecutor(tableQuery, []));
+   return from(this.queryExecutor(tableQuery, [], "other")) as Observable<SQLResultSet>;
   }
 
   save(
@@ -70,7 +71,7 @@ export class WebsqlService {
     const values = data.map(element => element.value);
     const preparedStatements = data.map(() => '?').join( ', ');
     const query = `INSERT INTO ${tableName} (${keys}) values (${preparedStatements})`;
-    const promise = this.queryExecutor(query, values);
+    const promise = this.queryExecutor(query, values, "other");
     return from(promise) as Observable<SQLResultSet>;
   }
 
@@ -83,11 +84,13 @@ export class WebsqlService {
       key: string,
       value: string | number
     }[]
-  ): Observable<SQLResultSet> {
+  ): Observable<SQLResultSetRowList> {
 
     const fieldsData = fields.length > 0 ? fields.join( ', '): '*';
 
-    const filtersQuery = filters.length > 0 ? filters.map(element => `${element.key} = ?`).join(' and ') : '1';
+    const filtersQuery = filters.length > 0
+    ? " WHERE " + filters.map(element => `${element.key} = ?`).join(' and ')
+    : '';
 
     const values = [pageSize, page];
 
@@ -98,10 +101,10 @@ export class WebsqlService {
       ...values
     ];
 
-    const query = `SELECT ${fieldsData} FROM ${tableName} WHERE ${filtersQuery} LIMIT = ? AND OFFSET = ?`;
+    const query = `SELECT ${fieldsData} FROM ${tableName} ${filtersQuery} LIMIT ? OFFSET ?`;
 
-    const promise = this.queryExecutor(query, finalValues);
-    return from(promise) as Observable<SQLResultSet>;
+    const promise = this.queryExecutor(query, finalValues, "select");
+    return from(promise) as Observable<SQLResultSetRowList>;
   }
 
 

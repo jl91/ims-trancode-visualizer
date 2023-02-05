@@ -1,6 +1,8 @@
-import { TrancodeField } from "./tracode-field.entity";
+import { TrancodeFieldEntity } from "./tracode-field.entity";
 
 export const tableName = "tracodes";
+
+export const fields = ['id unique', 'name', 'label'];
 
 export class TrancodesEntity {
 
@@ -10,7 +12,7 @@ export class TrancodesEntity {
 
   label: string | undefined;
 
-  fields: TrancodeField[] | undefined;
+  fields: TrancodeFieldEntity[] = [];
 
 
   toData(): {key: string, value: string | undefined}[]{

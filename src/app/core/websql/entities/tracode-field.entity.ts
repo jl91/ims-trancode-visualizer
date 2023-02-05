@@ -1,6 +1,7 @@
 
 export const tableName = "trancode_fields";
-export class TrancodeField {
+export const fields = ['id unique','fk_trancode', 'name', 'size'];
+export class TrancodeFieldEntity {
 
   id: string | undefined;
 
@@ -9,6 +10,7 @@ export class TrancodeField {
   name: string | undefined;
 
   size: number | undefined;
+
 
   toData(): {key: string, value: string | number | undefined}[]{
     return [
@@ -29,7 +31,7 @@ export class TrancodeField {
         value: this.size
       }
     ];
-
   }
+
 
 }

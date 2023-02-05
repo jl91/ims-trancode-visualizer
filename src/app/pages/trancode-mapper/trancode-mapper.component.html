@@ -79,34 +79,33 @@
           save
         </button>
       </form>
-
-
-      <!-- <table mat-table [dataSource]="data" class="mat-elevation-z8">
-
-        <ng-container *ngFor="let item of data">
-
-          <ng-container [matColumnDef]="item.columnName">
-
-            <th mat-header-cell *matHeaderCellDef>
-              {{ item.columnName }}
-            </th>
-
-            <td mat-cell *matCellDef="let element">
-              {{ item.columnValue }}
-            </td>
-          </ng-container>
-
-      </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-      </table> -->
-
     </div>
     <div class="json-visualizer">
       <pre>{{ baseForm.value | json}}</pre>
     </div>
 
+  </div>
+  <div>
+      <table mat-table [dataSource]="data" class="mat-elevation-z8">
+
+        <ng-container *ngFor="let headerMap of headersMap">
+
+          <ng-container [matColumnDef]="headerMap.columnName">
+
+            <th mat-header-cell *matHeaderCellDef>
+              {{ headerMap.columnName }}
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element[headerMap.columnValue] }}
+            </td>
+          </ng-container>
+
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      </table>
   </div>
 </div>
