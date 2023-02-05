@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { TrancodeFieldEntity } from 'src/app/shared/entities/tracode-field.entity';
 import { TrancodesEntity } from 'src/app/shared/entities/trancodes.entity';
 import { TrancodesService } from 'src/app/shared/services/trancodes.service';
@@ -38,7 +38,7 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     'Actions'
   ];
 
-  public headersMap: {columnName: string, columnValue: string}[] = [
+  public headersMap: { columnName: string, columnValue: string }[] = [
     {
       columnName: 'id',
       columnValue: 'id'
@@ -56,15 +56,15 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
   public data: TrancodesEntity[] = []
 
   get trancodeFields(): FormArray {
-    return (<FormArray> this.baseForm.controls['fields']);
+    return (<FormArray>this.baseForm.controls['fields']);
   }
 
-  addTrancodeField(event?: MouseEvent): void{
-    if(event){
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    event.stopPropagation();
-  }
+  addTrancodeField(event?: MouseEvent): void {
+    if (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+    }
     this.trancodeFields.push(
       this.formBuilder.group({
         name: new FormControl('', [Validators.required, Validators.minLength(1)]),
@@ -73,23 +73,23 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     );
   }
 
-  public onSubmit(event: SubmitEvent): void{
+  public onSubmit(event: SubmitEvent): void {
     console.log(event);
 
-    const {id, name, label, fields } = this.baseForm.value;
+    const { id, name, label, fields } = this.baseForm.value;
 
     const entity = new TrancodesEntity();
-    if(id) entity.id = id;
+    if (id) entity.id = id;
     entity.name = name;
     entity.label = label;
-    entity.fields = fields.map((field: {name: string, size: number}) => {
+    entity.fields = fields.map((field: { name: string, size: number }) => {
       const trancodeField = new TrancodeFieldEntity();
       trancodeField.name = field.name;
       trancodeField.size = field.size;
       return trancodeField;
     });
 
-    if(id){
+    if (id) {
       this.trancodesService.update(entity).subscribe(result => {
         console.log(result, "aqui");
         this.resetForm();
@@ -117,11 +117,11 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public onRemove(index: number): void{
+  public onRemove(index: number): void {
     this.trancodeFields.removeAt(index);
   }
 
-  onDrop(event: CdkDragDrop<string[]>): void{
+  onDrop(event: CdkDragDrop<string[]>): void {
     const previousIndex = event.previousIndex;
     const currentIndex = event.currentIndex;
 
@@ -146,13 +146,13 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
 
   private loadTrancode(): void {
     const subscription = this.trancodesService.findAll(0, 1000000)
-    .pipe(
-      tap(data => console.log(data)),
-    )
-    .subscribe((items: TrancodesEntity[]) => {
-      this.data = items;
-      subscription.unsubscribe()
-    });
+      .pipe(
+        tap(data => console.log(data)),
+      )
+      .subscribe((items: TrancodesEntity[]) => {
+        this.data = items;
+        subscription.unsubscribe()
+      });
   }
 
   onRemoveTrancode(trancode: TrancodesEntity): void {
@@ -164,5 +164,25 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     this.removeAllTrancodeFields();
     trancode.fields.forEach(() => this.addTrancodeField());
     this.baseForm.setValue(trancode);
+  }
+
+  downloadDatabase(): void {
+    const subscription = this.trancodesService.findAll(0, 1000000)
+      .pipe(
+        map((items: TrancodesEntity[]) => items.map(item => {
+          item.id = undefined;
+          return item;
+        })
+        )
+      )
+      .subscribe((items: TrancodesEntity[]) => {
+
+        const filename = 'database.json';
+        const jsonString = JSON.stringify(items, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+
+      });
   }
 }

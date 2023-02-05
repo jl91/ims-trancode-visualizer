@@ -70,6 +70,10 @@
     </div>
   </div>
   <div>
+    <button mat-raised-button type="button" (click)="downloadDatabase()" color="success">
+      <mat-icon>download</mat-icon>
+      Download JSON
+    </button>
     <table mat-table [dataSource]="data" class="mat-elevation-z8">
 
       <ng-container *ngFor="let headerMap of headersMap">
