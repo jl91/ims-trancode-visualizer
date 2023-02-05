@@ -5,21 +5,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from 'src/environments/environment';
-import { WebsqlService } from './core/websql/services/websql.service';
+import { IndexcedDBService } from './core/indexed-db/services/indexed-db.service';
+import { async } from '@angular/core/testing';
+import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 
-function initializeApp(): void {
-  const {name,version, displayName, estimatedSize} = environment.webSql.database;
-  const databaseName: string = environment.webSql.database.name + "-database";
+export function initializeApp(indexdedDatabase: IndexcedDBService) {
+  return async () => indexdedDatabase.configureDatabase();
 
-  const database = window.openDatabase(
-    name,
-    version,
-    displayName,
-    estimatedSize
-  );
-
-  WebsqlService.databaseConnectionInstance = database;
 }
+const {name,version} = environment.database;
+const databaseName = name + "-database";
+
+const dbConfig: DBConfig  = {
+  name: databaseName,
+  version: 1,
+  objectStoresMeta: []
+};
 
 @NgModule({
   declarations: [
@@ -28,12 +29,14 @@ function initializeApp(): void {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxIndexedDBModule.forRoot(dbConfig)
   ],
   bootstrap: [AppComponent],
   providers: [{
     provide: APP_INITIALIZER,
-    useFactory: () => initializeApp,
+    useFactory: initializeApp,
+    deps: [IndexcedDBService],
     multi: true
    }]
 })

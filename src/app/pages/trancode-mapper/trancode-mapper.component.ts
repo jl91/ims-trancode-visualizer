@@ -1,19 +1,20 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { tap } from 'rxjs';
-import { TrancodeFieldEntity } from 'src/app/core/websql/entities/tracode-field.entity';
-import { TrancodesEntity } from 'src/app/core/websql/entities/trancodes.entity';
-import { TrancodesService } from 'src/app/core/websql/services/trancodes.service';
+import { TrancodeFieldEntity } from 'src/app/shared/entities/tracode-field.entity';
+import { TrancodesEntity } from 'src/app/shared/entities/trancodes.entity';
+import { TrancodesService } from 'src/app/shared/services/trancodes.service';
 
 @Component({
   selector: 'app-trancode-mapper',
   templateUrl: './trancode-mapper.component.html',
   styleUrls: ['./trancode-mapper.component.scss']
 })
-export class TrancodeMapperComponent implements OnInit {
+export class TrancodeMapperComponent implements OnInit, AfterViewInit {
 
   public baseForm: FormGroup = this.formBuilder.group({
+    id: new FormControl(null, []),
     name: new FormControl('', [Validators.required]),
     label: new FormControl('', [Validators.required]),
     fields: this.formBuilder.array([])
@@ -26,10 +27,15 @@ export class TrancodeMapperComponent implements OnInit {
     this.addTrancodeField();
   }
 
+  ngAfterViewInit(): void {
+    this.loadTrancode();
+  }
+
   public displayedColumns: string[] = [
     'id',
     'Label',
     'Transaction',
+    'Actions'
   ];
 
   public headersMap: {columnName: string, columnValue: string}[] = [
@@ -70,24 +76,45 @@ export class TrancodeMapperComponent implements OnInit {
   public onSubmit(event: SubmitEvent): void{
     console.log(event);
 
-    const {name, label, fields } = this.baseForm.value;
-
-    console.log(fields);
+    const {id, name, label, fields } = this.baseForm.value;
 
     const entity = new TrancodesEntity();
-
+    if(id) entity.id = id;
     entity.name = name;
     entity.label = label;
     entity.fields = fields.map((field: {name: string, size: number}) => {
       const trancodeField = new TrancodeFieldEntity();
-      field.name = field.name;
-      field.size = field.size;
+      trancodeField.name = field.name;
+      trancodeField.size = field.size;
       return trancodeField;
     });
 
+    if(id){
+      this.trancodesService.update(entity).subscribe(result => {
+        console.log(result, "aqui");
+        this.resetForm();
+        this.loadTrancode();
+      });
+      return;
+    }
+
     this.trancodesService.save(entity).subscribe(result => {
-      console.log(result);
+      console.log(result, "aqui");
+      this.resetForm();
+      this.loadTrancode();
     });
+  }
+
+  private resetForm(): void {
+    this.baseForm.reset();
+    this.removeAllTrancodeFields();
+    this.addTrancodeField();
+  }
+
+  private removeAllTrancodeFields(): void {
+    while (this.trancodeFields.length !== 0) {
+      this.trancodeFields.removeAt(0)
+    }
   }
 
   public onRemove(index: number): void{
@@ -114,13 +141,28 @@ export class TrancodeMapperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.trancodesService.listAll()
+  }
+
+
+  private loadTrancode(): void {
+    const subscription = this.trancodesService.findAll(0, 1000000)
     .pipe(
       tap(data => console.log(data)),
     )
     .subscribe((items: TrancodesEntity[]) => {
       this.data = items;
+      subscription.unsubscribe()
     });
   }
 
+  onRemoveTrancode(trancode: TrancodesEntity): void {
+    this.trancodesService.delete(trancode).subscribe((result) => console.log(result));
+    this.loadTrancode();
+  }
+
+  onEditTrancode(trancode: TrancodesEntity): void {
+    this.removeAllTrancodeFields();
+    trancode.fields.forEach(() => this.addTrancodeField());
+    this.baseForm.setValue(trancode);
+  }
 }

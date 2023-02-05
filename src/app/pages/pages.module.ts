@@ -18,7 +18,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TrancodeMapperComponent } from './trancode-mapper/trancode-mapper.component';
 import { TrancodeViewerComponent } from './trancode-viewer/trancode-viewer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 
 const material_modules = [
@@ -45,7 +44,6 @@ const material_modules = [
     PagesRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    NgxJsonViewerModule,
     ...material_modules,
   ],
   exports: [PagesRoutingModule],
