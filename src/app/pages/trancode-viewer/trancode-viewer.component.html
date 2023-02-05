@@ -10,7 +10,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Select trancode map</mat-label>
           <mat-select>
-            <mat-option *ngFor="let item of data" [value]="item.id" (onSelectionChange)="onSelectionChange(item)">
+            <mat-option *ngFor="let item of data" [value]="item.id" (click)="onSelectionChange(item)">
               {{ item.name + " - " + item.label}}
             </mat-option>
           </mat-select>
