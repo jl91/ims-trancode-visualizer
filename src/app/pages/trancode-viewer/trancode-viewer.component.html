@@ -4,6 +4,58 @@
   <mat-divider></mat-divider>
 
   <div class="page-container_section">
-    <p>trancode-viewer works!</p>
+
+    <div class="select-trancode-map">
+      <div class="select-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Select trancode map</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let item of data" [value]="item.id" (onSelectionChange)="onSelectionChange(item)">
+              {{ item.name + " - " + item.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="selectedTrancodesEntity">
+        <p>Trancode total size: {{totalTrancodeSize}}</p>
+        <ul>
+          <li *ngFor="let field of selectedTrancodesEntity.fields">
+            {{ "Field name: " + field.name + " Field Size: " + field.size}}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="trancode-text-area" [formGroup]="form">
+      <mat-form-field appearance="fill">
+        <textarea matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        formControlName="trancodeText"
+      >
+
+        </textarea>
+      </mat-form-field>
+
+      <p *ngIf="currentTrancodeTextSize > totalTrancodeSize" class="alert-text">
+        Inputed Trancode is greater than expected size
+      </p>
+
+      <p *ngIf="currentTrancodeTextSize < totalTrancodeSize" class="alert-text">
+        Inputed Trancode is less than expected size
+      </p>
+    </div>
+
+    <div class="dump-variables" >
+      <ul *ngFor="let field of currentTrancodeFields">
+        <li>Name: {{field.fieldName}}</li>
+        <li>Value: {{field.fieldValue}}</li>
+        <li>Size: {{field.fieldSize}}</li>
+      </ul>
+    </div>
+
   </div>
 </div>

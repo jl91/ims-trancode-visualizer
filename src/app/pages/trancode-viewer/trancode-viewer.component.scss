@@ -1,0 +1,25 @@
+.page-container_section{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.select-trancode-map{
+  display: grid;
+
+  width: 500px;
+}
+
+.trancode-text-area{
+  display: grid;
+}
+
+.alert-text{
+  color: red;
+  font-size: 30px;
+}
+
+.dump-variables{
+  display: flex;
+  justify-content: flex-start;
+}
