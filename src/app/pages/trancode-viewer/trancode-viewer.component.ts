@@ -101,4 +101,8 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
     this.currentClassOver = index;
   }
 
+  onFieldMouseLeave(): void {
+    this.currentClassOver = -1;
+  }
+
 }
