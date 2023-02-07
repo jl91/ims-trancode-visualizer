@@ -13,12 +13,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 import { TrancodeMapperComponent } from './trancode-mapper/trancode-mapper.component';
 import { TrancodeViewerComponent } from './trancode-viewer/trancode-viewer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 
 
 const material_modules = [
@@ -30,7 +32,8 @@ const material_modules = [
   MatFormFieldModule,
   MatInputModule,
   DragDropModule,
-  MatSelectModule
+  MatSelectModule,
+  MatToolbarModule
 ];
 
 @NgModule({
@@ -39,6 +42,7 @@ const material_modules = [
     HomeComponent,
     TrancodeMapperComponent,
     TrancodeViewerComponent,
+    ToolbarComponent,
   ],
   imports: [
     CommonModule,
