@@ -58,11 +58,17 @@
             </div>
           </ng-container>
         </div>
-        <button mat-raised-button matButton type="submit" color="primary" [disabled]="baseForm.invalid"
-          *ngIf="trancodeFields.length > 5">
-          <mat-icon>save</mat-icon>
-          save
-        </button>
+
+        <div class="add-trancode-field" *ngIf="trancodeFields.length > 5">
+          <button mat-raised-button matButton type="button" (click)="addTrancodeField($event)">
+            <mat-icon>add</mat-icon>
+            add trancode field
+          </button>
+          <button mat-raised-button matButton type="submit" color="primary" [disabled]="baseForm.invalid">
+            <mat-icon>save</mat-icon>
+            save
+          </button>
+        </div>
       </form>
     </div>
     <div class="json-visualizer">
@@ -70,7 +76,7 @@
     </div>
   </div>
   <div>
-    <button mat-raised-button type="button" (click)="downloadDatabase()" color="success">
+    <button mat-raised-button type="button" (click)="downloadDatabase()" color="primary">
       <mat-icon>download</mat-icon>
       Download JSON
     </button>
