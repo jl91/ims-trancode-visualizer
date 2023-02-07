@@ -1,10 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { map, tap } from 'rxjs';
 import { TrancodeFieldEntity } from 'src/app/shared/entities/tracode-field.entity';
 import { TrancodesEntity } from 'src/app/shared/entities/trancodes.entity';
 import { TrancodesService } from 'src/app/shared/services/trancodes.service';
+import { ImportDatabaseModalComponent } from './import-database-modal/import-database-modal.component';
 
 @Component({
   selector: 'app-trancode-mapper',
@@ -22,7 +24,8 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private trancodesService: TrancodesService
+    private trancodesService: TrancodesService,
+    public dialog: MatDialog
   ) {
     this.addTrancodeField();
   }
@@ -184,5 +187,18 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
         window.open(url);
 
       });
+  }
+
+  importJsonDatabase(): void {
+    const dialogRef: MatDialogRef<ImportDatabaseModalComponent> = this.dialog.open(ImportDatabaseModalComponent, {
+        height: '400px',
+        width: '600px',
+    });
+
+    const subscription = dialogRef.beforeClosed()
+    .subscribe(() => {
+      this.loadTrancode();
+      subscription.unsubscribe();
+    });
   }
 }

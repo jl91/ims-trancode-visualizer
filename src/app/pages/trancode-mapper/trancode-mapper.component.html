@@ -76,10 +76,16 @@
     </div>
   </div>
   <div>
-    <button mat-raised-button type="button" (click)="downloadDatabase()" color="primary">
-      <mat-icon>download</mat-icon>
-      Download JSON
-    </button>
+    <div class="add-trancode-field">
+      <button mat-raised-button type="button" (click)="downloadDatabase()" color="primary">
+        <mat-icon>download</mat-icon>
+        Download JSON
+      </button>
+      <button mat-raised-button type="button" (click)="importJsonDatabase()" color="primary">
+        <mat-icon>download</mat-icon>
+        Import JSON Database
+      </button>
+    </div>
     <table mat-table [dataSource]="data" class="mat-elevation-z8">
 
       <ng-container *ngFor="let headerMap of headersMap">

@@ -1,0 +1,12 @@
+<div class="database-import-container">
+  <mat-form-field appearance="fill" >
+    <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" class="text-area-container" [(ngModel)]="textArea">
+
+  </textarea>
+  </mat-form-field>
+  <footer>
+    <button mat-raised-button color="primary" (click)="save($event)">
+      Save
+    </button>
+  </footer>
+</div>

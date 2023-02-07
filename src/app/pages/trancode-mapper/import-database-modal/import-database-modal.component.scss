@@ -1,0 +1,18 @@
+.database-import-container{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  grid-auto-rows: auto;
+
+  .text-area-container{
+    height: auto;
+    min-height: 275px;
+  }
+
+  footer{
+    padding-right: 5px;
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+  }
+}

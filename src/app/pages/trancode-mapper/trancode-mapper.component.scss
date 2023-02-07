@@ -18,13 +18,6 @@
         padding: 5px;
       }
 
-      .add-trancode-field{
-        padding: 25px;
-        button{
-          margin-left: 0;
-          margin-right: 10px;
-        }
-      }
 
       .fields-container{
         display: flex;
@@ -45,4 +38,11 @@
 }
 
 
+.add-trancode-field{
+  padding: 25px;
+  button{
+    margin-left: 0;
+    margin-right: 10px;
+  }
+}
 
