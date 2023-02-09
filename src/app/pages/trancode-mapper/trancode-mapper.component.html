@@ -46,10 +46,16 @@
                 <input matInput formControlName="name" type="text" />
               </mat-form-field>
 
-              <mat-form-field class="form-item">
+              <mat-form-field class="form-item"  floatLabel="always">
+                <mat-label> Field Label </mat-label>
+                <input matInput formControlName="label" type="text" />
+              </mat-form-field>
+
+              <mat-form-field class="form-item number-item">
                 <mat-label> Field Size </mat-label>
                 <input matInput formControlName="size" type="number" min="1" />
               </mat-form-field>
+
 
               <button mat-icon-button matButton type="button" color="primary" (click)="onRemove(i)"
                 [disabled]="trancodeFields.length <= 1">
@@ -120,5 +126,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    <mat-paginator
+    [length]="countTotalDatabaseItems"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    [pageSize]="5" aria-label="Select page of saved trancodes maps"
+    (page)="onPageChange($event)"
+    >
+  </mat-paginator>
   </div>
 </div>

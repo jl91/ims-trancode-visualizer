@@ -91,7 +91,6 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
   }
 
   public onSelectionChange(trancode: TrancodesEntity) {
-    console.log(trancode);
     this.selectedTrancodesEntity = trancode;
     this.totalTrancodeSize = trancode.fields.reduce(
       (accumulator: number, current: TrancodeFieldEntity) => accumulator + (current.size as number), 0);

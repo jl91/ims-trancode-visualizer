@@ -2,7 +2,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { map, tap } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
+import { map, Observable, tap } from 'rxjs';
 import { TrancodeFieldEntity } from 'src/app/shared/entities/tracode-field.entity';
 import { TrancodesEntity } from 'src/app/shared/entities/trancodes.entity';
 import { TrancodesService } from 'src/app/shared/services/trancodes.service';
@@ -36,10 +37,12 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
 
   public displayedColumns: string[] = [
     'id',
-    'Label',
-    'Transaction',
+    'IMS Transaction name',
+    'IMS Transaction label',
     'Actions'
   ];
+
+  public countTotalDatabaseItems: number = 0;
 
   public headersMap: { columnName: string, columnValue: string }[] = [
     {
@@ -47,13 +50,13 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
       columnValue: 'id'
     },
     {
-      columnName: 'Label',
-      columnValue: 'label'
+      columnName: 'IMS Transaction name',
+      columnValue: 'name'
     },
     {
-      columnName: 'Transaction',
-      columnValue: 'name'
-    }
+      columnName: 'IMS Transaction label',
+      columnValue: 'label'
+    },
   ];
 
   public data: TrancodesEntity[] = []
@@ -72,6 +75,7 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
       this.formBuilder.group({
         name: new FormControl('', [Validators.required, Validators.minLength(1)]),
         size: new FormControl(1, [Validators.required]),
+        label: new FormControl('', [])
       })
     );
   }
@@ -85,10 +89,11 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     if (id) entity.id = id;
     entity.name = name;
     entity.label = label;
-    entity.fields = fields.map((field: { name: string, size: number }) => {
+    entity.fields = fields.map((field: { name: string, size: number , label: string}) => {
       const trancodeField = new TrancodeFieldEntity();
       trancodeField.name = field.name;
       trancodeField.size = field.size;
+      trancodeField.label = field.label;
       return trancodeField;
     });
 
@@ -147,14 +152,18 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
   }
 
 
-  private loadTrancode(): void {
-    const subscription = this.trancodesService.findAll(0, 1000000)
+  private loadTrancode(
+    page: number = 0,
+    pageSize: number = 5
+  ): void {
+    const subscription = this.trancodesService.findAll(page, pageSize)
       .pipe(
         tap(data => console.log(data)),
       )
       .subscribe((items: TrancodesEntity[]) => {
         this.data = items;
-        subscription.unsubscribe()
+        subscription.unsubscribe();
+        this.doCountTotalDatabaseItems();
       });
   }
 
@@ -198,6 +207,20 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     const subscription = dialogRef.beforeClosed()
     .subscribe(() => {
       this.loadTrancode();
+      subscription.unsubscribe();
+    });
+  }
+
+  onPageChange(page: PageEvent): void {
+    const {pageIndex, pageSize} = page;
+    this.loadTrancode(pageIndex, pageSize);
+  }
+
+ doCountTotalDatabaseItems(): void{
+    const subscription = this.trancodesService
+    .countTotalDatabaseItems()
+    .subscribe(total => {
+      this.countTotalDatabaseItems = total;
       subscription.unsubscribe();
     });
   }

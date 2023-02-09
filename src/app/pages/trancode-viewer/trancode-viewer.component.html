@@ -28,8 +28,9 @@
 
     <mat-divider></mat-divider>
 
-    <div class="trancode-text-area" [formGroup]="form">
+    <div class="trancode-text-area" [formGroup]="form" *ngIf="selectedTrancodesEntity">
       <mat-form-field appearance="fill">
+        <mat-label floatLabel="always">Trancode</mat-label>
         <textarea matInput
           cdkTextareaAutosize
           cdkAutosizeMinRows="1"
