@@ -81,7 +81,6 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
   }
 
   public onSubmit(event: SubmitEvent): void {
-    console.log(event);
 
     const { id, name, label, fields } = this.baseForm.value;
 
@@ -99,7 +98,6 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
 
     if (id) {
       this.trancodesService.update(entity).subscribe(result => {
-        console.log(result, "aqui");
         this.resetForm();
         this.loadTrancode();
       });
@@ -107,7 +105,6 @@ export class TrancodeMapperComponent implements OnInit, AfterViewInit {
     }
 
     this.trancodesService.save(entity).subscribe(result => {
-      console.log(result, "aqui");
       this.resetForm();
       this.loadTrancode();
     });

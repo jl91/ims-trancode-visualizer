@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { TrancodeFieldEntity } from 'src/app/shared/entities/tracode-field.entity';
 import { TrancodesEntity } from 'src/app/shared/entities/trancodes.entity';
 import { TrancodesService } from 'src/app/shared/services/trancodes.service';
+import {Clipboard} from '@angular/cdk/clipboard';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-trancode-viewer',
@@ -34,7 +36,9 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
 
   constructor(
     private trancoesService: TrancodesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private clipboard: Clipboard,
+    private snackBar: MatSnackBar
   ) {
 
   }
@@ -64,8 +68,6 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
           const sizeAt = (item.size as number);
           const slice = valueCopy.slice(0, sizeAt);
           valueCopy = valueCopy.slice(sizeAt, valueCopy.length);
-
-          console.log("slice: " + valueCopy + "\n");
 
           this.currentTrancodeFields.push({
             fieldName: item.name as string,
@@ -102,6 +104,16 @@ export class TrancodeViewerComponent implements OnInit, AfterViewInit {
 
   onFieldMouseLeave(): void {
     this.currentClassOver = -1;
+  }
+
+  onCopy(index: number): void {
+
+    const value = this.currentTrancodeFields[index].fieldValue;
+    this.clipboard.copy(value);
+    this.snackBar.open("Value copied", undefined, {
+      duration: 3000
+    });
+
   }
 
 }

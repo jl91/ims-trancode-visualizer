@@ -1,10 +1,10 @@
+// Angular core
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home/home.component';
-import { PagesRoutingModule } from './pages-routing.module';
-import { LayoutComponent } from './layout/layout.component';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// Material
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,17 +15,27 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+
+// CDK
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+
+// Components
 import { TrancodeMapperComponent } from './trancode-mapper/trancode-mapper.component';
 import { TrancodeViewerComponent } from './trancode-viewer/trancode-viewer.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { ImportDatabaseModalComponent } from './trancode-mapper/import-database-modal/import-database-modal.component';
+import { HomeComponent } from './home/home.component';
+import { PagesRoutingModule } from './pages-routing.module';
+import { LayoutComponent } from './layout/layout.component';
 
 
 const material_modules = [
+  // Material Modules
   MatSidenavModule,
   MatDividerModule,
   MatButtonModule,
@@ -33,11 +43,15 @@ const material_modules = [
   MatTableModule,
   MatFormFieldModule,
   MatInputModule,
-  DragDropModule,
   MatSelectModule,
   MatToolbarModule,
   MatDialogModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatTooltipModule,
+  MatSnackBarModule,
+  // CDK
+  DragDropModule,
+  ClipboardModule,
 ];
 
 @NgModule({
