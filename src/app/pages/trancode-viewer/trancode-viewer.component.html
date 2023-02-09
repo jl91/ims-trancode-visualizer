@@ -52,7 +52,6 @@
 
     <div class="dump-variables">
 
-      <p class="warning-text">the space character is replaced by * to prevent html issues to print that char</p>
       <div class="text-output">
         <span *ngFor="let field of currentTrancodeFields;let j = index"
           [ngClass]="{'over-index': j  === currentClassOver}">{{field.fieldValue.replaceAll(' ', '&nbsp;') }}</span>
@@ -61,7 +60,7 @@
         <ul *ngFor="let field of currentTrancodeFields; let i = index" (mouseover)="onFieldMouseOver(i)"
           (mouseleave)="onFieldMouseLeave()">
           <li>Name: {{field.fieldName}}</li>
-          <li>Value: {{field.fieldValue}}</li>
+          <!-- <li>Value: {{field.fieldValue}}</li> -->
           <li>Size: {{field.fieldSize}}</li>
         </ul>
       </div>
